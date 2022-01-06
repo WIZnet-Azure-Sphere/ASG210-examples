@@ -1,0 +1,12 @@
+{
+  "SchemaVersion": 1,
+  "Name" : "UART_HLApp_mt3620_BareMetal",
+  "ComponentId" : "4f2d9823-dbbd-4740-a7dd-198c32ba34fe",
+  "EntryPoint": "/bin/app",
+  "CmdArgs": [],
+  "Capabilities": {
+    "Gpio": [ "$WIZNET_ASG210_USER_BUTTON_SW2", "$WIZNET_ASG210_ISU3_N232_485_SEL", "$WIZNET_ASG210_ISU3_NSDA_RXD_SEL" ],
+    "Uart": [ "$WIZNET_ASG210_ISU3_UART" ]
+  },
+  "ApplicationType": "Default"
+}

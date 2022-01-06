@@ -1,0 +1,12 @@
+{
+  "SchemaVersion": 1,
+  "Name" : "I2C_EEPROM_HLApp_mt3620_BareMetal",
+  "ComponentId" : "685f13af-25a5-40b2-8dd8-8cbc253ecbd8",
+  "EntryPoint": "/bin/app",
+  "CmdArgs": [],
+  "Capabilities": {
+    "Gpio": [ "$WIZNET_ASG210_USER_BUTTON_SW2", "$WIZNET_ASG210_ISU3_N232_485_SEL", "$WIZNET_ASG210_ISU3_NSDA_RXD_SEL" ],
+    "I2cMaster": [ "$WIZNET_ASG210_SD_I2C" ]
+  },
+  "ApplicationType": "Default"
+}

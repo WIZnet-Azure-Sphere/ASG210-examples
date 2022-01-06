@@ -1,0 +1,11 @@
+{
+  "SchemaVersion": 1,
+  "Name": "GPIO_HLApp_mt3620_BareMetal",
+  "ComponentId": "dc7f135c-6074-4d49-aa3a-160e4eed884f",
+  "EntryPoint": "/bin/app",
+  "CmdArgs": [],
+  "Capabilities": {
+    "Gpio": [ "$WIZNET_ASG210_USER_BUTTON_SW2", "$WIZNET_ASG210_STATUS_LED1_AZURE" ]
+  }, 
+  "ApplicationType": "Default"
+}

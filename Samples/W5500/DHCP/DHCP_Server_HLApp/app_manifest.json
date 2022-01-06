@@ -1,0 +1,12 @@
+{
+  "SchemaVersion": 1,
+  "Name": "DHCP_Server_HLApp",
+  "ComponentId": "dc7f135c-6074-4d49-aa3a-160e4eed884f",
+  "EntryPoint": "/bin/app",
+  "CmdArgs": [],
+  "Capabilities": {
+    "Gpio": [ "$WIZNET_ASG210_USER_BUTTON_SW2", "$WIZNET_ASG210_STATUS_LED1_AZURE", "$WIZNET_ASG210_W5500_RESET", "$WIZNET_ASG210_W5500_NRDY" ],
+    "SpiMaster": [ "$WIZNET_ASG210_W5500_SPI" ]
+  }, 
+  "ApplicationType": "Default"
+}

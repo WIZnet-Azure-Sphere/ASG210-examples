@@ -1,0 +1,12 @@
+{
+  "SchemaVersion": 1,
+  "Name": "BARE_METAL_RTAPP_GPIO",
+  "ComponentId": "281F22B9-199E-4F47-A571-5976615BFFBE",
+  "EntryPoint": "/bin/app",
+  "CmdArgs": [],
+  "Capabilities": {
+    "Gpio": [ 0, 1, 2, 3, 7, 6, 13, 41, 42, 43, 44, 45 ],
+    "I2cMaster": [ "ISU3" ]
+  },
+  "ApplicationType": "RealTimeCapable"
+}
