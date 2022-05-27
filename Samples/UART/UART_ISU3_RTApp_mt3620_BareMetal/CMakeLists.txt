@@ -9,7 +9,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Configurations
-project(UART_RTApp_mt3620_BareMetal C)
+project(UART_ISU3_RTApp_mt3620_BareMetal C)
 
 azsphere_configure_tools(TOOLS_REVISION "21.01")
 

@@ -1,11 +1,11 @@
 {
   "SchemaVersion": 1,
   "Name": "UART_Openlog_RTApp_mt3620_BareMetal",
-  "ComponentId": "281F22B9-199E-4F47-A571-5976615BFFBE",
+  "ComponentId": "7028991E-19FE-4A1B-9D71-A53D7245213D",
   "EntryPoint": "/bin/app",
   "CmdArgs": [],
   "Capabilities": {
-    "Gpio": [ 40 ],
+    "Gpio": [ 60 ],
     "Uart": [ "ISU2" ]
   },
   "ApplicationType": "RealTimeCapable"

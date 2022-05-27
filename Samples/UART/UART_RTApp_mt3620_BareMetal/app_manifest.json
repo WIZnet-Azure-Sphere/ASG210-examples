@@ -5,8 +5,6 @@
   "EntryPoint": "/bin/app",
   "CmdArgs": [],
   "Capabilities": {
-    "Gpio": [ 4, 6, 7 ],
-    "Uart": [ "ISU3" ]
   },
   "ApplicationType": "RealTimeCapable"
 }

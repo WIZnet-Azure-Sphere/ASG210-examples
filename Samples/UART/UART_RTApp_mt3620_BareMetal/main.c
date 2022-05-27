@@ -42,125 +42,242 @@
 #include "os_hal_uart.h"
 #include "os_hal_gpt.h"
 #include "os_hal_gpio.h"
+#include "queue.h"
+#include "hdl_uart.h"
 
-#define USE_LED_BLT
+#define PRINT_INFO
 
-/******************************************************************************/
-/* Configurations */
-/******************************************************************************/
-/* UART */
-static const uint8_t uart_port_num_prtf = OS_HAL_UART_PORT0;
-static const uint8_t uart_port_num = OS_HAL_UART_ISU3;
+ /******************************************************************************/
+ /* Configurations */
+ /******************************************************************************/
+ /* UART */
+static const uint8_t terminal_port_num = OS_HAL_UART_PORT0;
 
-/* GPIO_4 for nSDA/RXD SEL */
-static const uint8_t sel_nSDA = OS_HAL_GPIO_4;
-/* GPIO_6 for 485/232 SEL */
-static const uint8_t sel_n232 = OS_HAL_GPIO_6;
-/* GPIO_7 for 485/422 SEL */
-static const uint8_t sel_n422 = OS_HAL_GPIO_7;
+str_qData terminal;
+u8* terminal_buf_p;
+
 /******************************************************************************/
 /* Applicaiton Hooks */
 /******************************************************************************/
 /* Hook for "printf". */
-void _putchar(char character)
-{
-    mtk_os_hal_uart_put_char(uart_port_num_prtf, character);
-    if (character == '\n')
-        mtk_os_hal_uart_put_char(uart_port_num_prtf, '\r');
-}
-
+void _putchar(char character);
 /******************************************************************************/
 /* Functions */
 /******************************************************************************/
-static int gpio_output(u8 gpio_no, u8 level)
-{
-#if 1
-    // 20201030 taylor
-    mtk_os_hal_gpio_set_direction(gpio_no, OS_HAL_GPIO_DIR_OUTPUT);
-    mtk_os_hal_gpio_set_output(gpio_no, level);
-#else
-    int ret;
-
-    ret = mtk_os_hal_gpio_request(gpio_no);
-    if (ret != 0)
-    {
-        printf("request gpio[%d] fail\n", gpio_no);
-        return ret;
-    }
-
-    mtk_os_hal_gpio_set_direction(gpio_no, OS_HAL_GPIO_DIR_OUTPUT);
-    mtk_os_hal_gpio_set_output(gpio_no, level);
-    ret = mtk_os_hal_gpio_free(gpio_no);
-    if (ret != 0)
-    {
-        printf("free gpio[%d] fail\n", gpio_no);
-        return 0;
-    }
-#endif
-    return 0;
-}
-
-static int gpio_input(u8 gpio_no, os_hal_gpio_data* pvalue)
-{
-#if 1
-    // 20201030 taylor
-    mtk_os_hal_gpio_set_direction(gpio_no, OS_HAL_GPIO_DIR_INPUT);
-    mtk_os_hal_gpio_get_input(gpio_no, pvalue);
-
-#else
-    u8 ret;
-
-    ret = mtk_os_hal_gpio_request(gpio_no);
-    if (ret != 0)
-    {
-        printf("request gpio[%d] fail\n", gpio_no);
-        return ret;
-    }
-    mtk_os_hal_gpio_set_direction(gpio_no, OS_HAL_GPIO_DIR_INPUT);
-    mtk_os_hal_gpio_get_input(gpio_no, pvalue);
-    ret = mtk_os_hal_gpio_free(gpio_no);
-    if (ret != 0)
-    {
-        printf("free gpio[%d] fail\n", gpio_no);
-        return ret;
-    }
-#endif
-    return 0;
-}
-
-void uart_dbg_isr(void)
-{
-    char ch;
-    ch = mtk_os_hal_uart_get_char(uart_port_num_prtf);
-    printf(">%c\r\n", ch);
-    mtk_os_hal_uart_put_char(uart_port_num, ch);
-}
+int gpio_output(u8 gpio_no, u8 level);
+int gpio_input(u8 gpio_no, os_hal_gpio_data* pvalue);
+void uart_rx_service(uint8_t port, str_qData* queue);
+void uart_terminal_isr(void);
 
 _Noreturn void RTCoreMain(void)
 {
     /* Init Vector Table */
     NVIC_SetupVectorTable();
 
-    // 232
-    gpio_output(sel_n232, OS_HAL_GPIO_DATA_LOW);
-    gpio_output(sel_nSDA, OS_HAL_GPIO_DATA_HIGH);
-
     /* Init UART */
-    mtk_os_hal_uart_ctlr_init(uart_port_num_prtf);
+    mtk_os_hal_uart_ctlr_init(terminal_port_num);
     printf("\r\n");
     printf("=============================================\r\n");
     printf("UART_RTApp_mt3620_BareMetal\r\n");
-    printf("UART Inited (port_num=%d)\r\n", uart_port_num_prtf);
+    printf("UART Inited (port_num=%d)\r\n", terminal_port_num);
     printf("=============================================\r\n");
 
-    mtk_os_hal_uart_set_irq(uart_port_num_prtf, UART_INT_RX_BUFFER_FULL | UART_INT_LINE_STATUS);
+    terminal_buf_p = (u8*)malloc(1024);
+    data_queueinit(&terminal, terminal_buf_p, 1024);
 
-    NVIC_Register(4, uart_dbg_isr);
+    mtk_os_hal_uart_set_irq(terminal_port_num, UART_INT_RX_BUFFER_FULL | UART_INT_LINE_STATUS);
+    NVIC_Register(4, uart_terminal_isr);
     NVIC_EnableIRQ(4);
 
-    mtk_os_hal_uart_ctlr_init(uart_port_num);
+    u32 qstack;
 
     for (;;)
-        __asm__("wfi");
+    {
+        NVIC_DisableIRQ(4);
+
+        qstack = data_queue_getlen(&terminal);
+
+        if (qstack != 0)
+        {
+            u8 temp[1024];
+
+#ifdef PRINT_INFO
+            printf("\r\n>>Received %d bytes from UART\r\n", qstack);
+#endif
+
+            data_dequeue(&terminal, temp, qstack);
+            for (int i = 0; i < qstack; i++)
+            {
+#if 1
+                mtk_os_hal_uart_put_char(terminal_port_num, temp[i]);
+#else
+                printf("%c", temp[i]);
+#endif
+            }
+#ifdef PRINT_INFO
+            printf("\r\n>>end\r\n");
+#endif
+        }
+        NVIC_EnableIRQ(4);
+    }
+}
+
+void _putchar(char character)
+{
+    mtk_os_hal_uart_put_char(terminal_port_num, character);
+    if (character == '\n')
+        mtk_os_hal_uart_put_char(terminal_port_num, '\r');
+}
+
+int gpio_output(u8 gpio_no, u8 level)
+{
+    mtk_os_hal_gpio_set_direction(gpio_no, OS_HAL_GPIO_DIR_OUTPUT);
+    mtk_os_hal_gpio_set_output(gpio_no, level);
+    return 0;
+}
+
+int gpio_input(u8 gpio_no, os_hal_gpio_data* pvalue)
+{
+    mtk_os_hal_gpio_set_direction(gpio_no, OS_HAL_GPIO_DIR_INPUT);
+    mtk_os_hal_gpio_get_input(gpio_no, pvalue);
+    return 0;
+}
+
+void uart_rx_clean(uint8_t port, str_qData* queue)
+{
+    char ch;
+    u32 regv;
+    u32 i;
+
+    if (mtk_os_hal_uart_readreg(port, UART_VFIFO_EN_REG))
+    {
+        // VFIFO_EN == 1
+    }
+    else
+    {
+        // VFIFO_EN == 0
+
+        // read rx_offset(number of data in RX FIFO)
+        regv = mtk_os_hal_uart_readreg(port, RX_OFFSET);
+        //printf("Received %d\r\n", regv);
+
+        for (i = 0; i < regv; i++)
+        {
+            ch = mtk_os_hal_uart_get_char(port);
+        }
+    }
+}
+
+void uart_rx_service(uint8_t port, str_qData* queue)
+{
+    char ch;
+    u32 regv;
+    u32 i;
+
+    regv = mtk_os_hal_uart_readreg(port, UART_IIR);
+    //printf("IIR 0x%x\r\n", regv);
+
+    switch (regv & 0x3F)
+    {
+    case 0x06:
+        // Line Status Interrupt
+        regv = mtk_os_hal_uart_readreg(port, UART_LSR);
+        printf("Port %d\r\n", port);
+        printf("LSR 0x%x\r\n", regv);
+
+        if (regv & 1 << 7)
+        {
+            // RX FIFO Error Indicator
+            printf("PE, FE, BI\r\n");
+        }
+        if (regv & 1 << 6)
+        {
+            // TX Holding Register(or TX FIFO) and the TX Shift Register are empty
+            printf("TEMT\r\n");
+        }
+        if (regv & 1 << 5)
+        {
+            // TX Holding Register Empty
+            printf("THRE\r\n");
+        }
+        if (regv & 1 << 4)
+        {
+            // Break Interrupt
+            printf("BI\r\n");
+            uart_rx_clean(port, queue);
+            return;
+        }
+        if (regv & 1 << 3)
+        {
+            // Framing Error
+            printf("FE\r\n");
+            uart_rx_clean(port, queue);
+            return;
+        }
+        if (regv & 1 << 2)
+        {
+            // Parity Error
+            printf("PE\r\n");
+            uart_rx_clean(port, queue);
+            return;
+        }
+        if (regv & 1 << 1)
+        {
+            // Overrun Error
+            printf("OE\r\n");
+            uart_rx_clean(port, queue);
+            return;
+        }
+        if (regv & 1 << 0)
+        {
+            // Data Ready
+            printf("DR\r\n");
+        }
+        break;
+    case 0x0c:
+        // RX Data Timeout Interrupt
+    case 0x04:
+        // RX Data Received Interrupt
+        if (mtk_os_hal_uart_readreg(port, UART_VFIFO_EN_REG))
+        {
+            // VFIFO_EN == 1
+        }
+        else
+        {
+            // VFIFO_EN == 0
+
+            // read rx_offset(number of data in RX FIFO)
+            regv = mtk_os_hal_uart_readreg(port, RX_OFFSET);
+            //printf("Received %d\r\n", regv);
+
+            for (i = 0; i < regv; i++)
+            {
+                ch = mtk_os_hal_uart_get_char(port);
+                data_enqueue(queue, &ch);
+            }
+        }
+        break;
+    case 0x02:
+        // TX Holding Register Empty Interrupt
+        break;
+    case 0x00:
+        // Modem Status Control Interrupt
+        break;
+    case 0x10:
+        // Software Flow Control Interrupt
+        break;
+    case 0x20:
+        // Hardware Flow Control Interrupt
+        break;
+    case 0x01:
+        // No interrupt pending
+        break;
+
+    }
+}
+
+void uart_terminal_isr(void)
+{
+    uart_rx_service(terminal_port_num, &terminal);
 }
 

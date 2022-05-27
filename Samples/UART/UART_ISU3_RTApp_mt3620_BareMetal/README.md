@@ -1,4 +1,4 @@
-# Sample: UART_ISU2_Openlog_RTApp_mt3620_BareMetal M4 real-time application - Bare Metal UART
+# Sample: UART_ISU3_RTApp_mt3620_BareMetal M4 real-time application - Bare Metal UART
 ### Description
 This sample demonstrates how to use UART on an MT3620 real-time core.  
 - PORT0 UART interface is used to print the output log.

@@ -1,0 +1,12 @@
+{
+  "SchemaVersion": 1,
+  "Name": "UART_ISU3_RTApp_mt3620_BareMetal",
+  "ComponentId": "08C1F808-437C-479A-9F0B-CB110201628E",
+  "EntryPoint": "/bin/app",
+  "CmdArgs": [],
+  "Capabilities": {
+    "Gpio": [ 8, 9, 10, 70 ],
+    "Uart": [ "ISU3" ]
+  },
+  "ApplicationType": "RealTimeCapable"
+}
