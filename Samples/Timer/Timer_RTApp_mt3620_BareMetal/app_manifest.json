@@ -1,0 +1,10 @@
+{
+  "SchemaVersion": 1,
+  "Name": "Timer_RTApp_mt3620_BareMetal",
+  "ComponentId": "AC72A1D5-B9B4-415F-8FDE-513A0CD3F2BD",
+  "EntryPoint": "/bin/app",
+  "CmdArgs": [],
+  "Capabilities": {
+  },
+  "ApplicationType": "RealTimeCapable"
+}

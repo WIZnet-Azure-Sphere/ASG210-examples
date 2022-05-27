@@ -6,7 +6,7 @@
   "CmdArgs": [],
   "Capabilities": {
     "SpiMaster": ["ISU1"],
-    "Gpio": [ 12 ]
+    "Gpio": [ 56, 57, 58 ]
   },
   "ApplicationType": "RealTimeCapable"
 }

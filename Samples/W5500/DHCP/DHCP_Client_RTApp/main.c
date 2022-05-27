@@ -143,11 +143,19 @@ uint8_t gDATABUF[DATA_BUF_SIZE];
 #endif
 
 /* GPIO */
+#if 1
+// 20220516 taylor
+// ASG210 V1.2
+static const uint8_t gpio_w5500_reset = OS_HAL_GPIO_58;
+static const uint8_t gpio_w5500_ready = OS_HAL_GPIO_56;
+static const uint8_t gpio_w5500_int = OS_HAL_GPIO_57;
+#else
 static const uint8_t gpio_w5500_reset = OS_HAL_GPIO_12;
 // ASG210 V1.1 Bug
 #if 0
 static const uint8_t gpio_w5500_ready = OS_HAL_GPIO_47;
 static const uint8_t gpio_w5500_int = OS_HAL_GPIO_48;
+#endif
 #endif
 
 #define _MAIN_DEBUG_
@@ -191,6 +199,15 @@ void w5500_init()
 
     gpio_output(gpio_w5500_reset, OS_HAL_GPIO_DATA_HIGH);
     osai_delay_ms(1);
+
+// 20210329
+// ASG210 V1.2
+// W5500 ready check
+    os_hal_gpio_data w5500_ready;
+    do
+    {
+        gpio_input(gpio_w5500_ready, &w5500_ready);
+    } while (!w5500_ready);
 
 // 20210222 taylor
 // Ignored ready check

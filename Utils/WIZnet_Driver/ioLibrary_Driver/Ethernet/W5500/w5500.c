@@ -68,7 +68,7 @@
 #include "../../applibs_versions.h"
 #include <applibs/log.h>
 #include <applibs/spi.h>
-#include <hw/wiznet_asg210_v1.1.h>
+#include <hw/wiznet_asg210_v1.2.h>
 #else
 #include "printf.h"
 

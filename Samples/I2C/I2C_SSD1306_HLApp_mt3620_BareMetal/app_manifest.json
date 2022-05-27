@@ -5,8 +5,8 @@
   "EntryPoint": "/bin/app",
   "CmdArgs": [],
   "Capabilities": {
-    "Gpio": [ "$USI_MT3620_BT_COMBO_PIN55_GPIO13", "$USI_MT3620_BT_COMBO_PIN63_GPIO6", "$USI_MT3620_BT_COMBO_PIN65_GPIO4"],
-    "I2cMaster": [ "$USI_MT3620_BT_COMBO_ISU3_I2C" ]
+    "Gpio": [ "$WIZNET_ASG210_USER_BUTTON_SW2", "$WIZNET_ASG210_ISU3_NSDA_RXD_SEL" ],
+    "I2cMaster": [ "$WIZNET_ASG210_ISU3_I2C" ]
   },
   "ApplicationType": "Default"
 }

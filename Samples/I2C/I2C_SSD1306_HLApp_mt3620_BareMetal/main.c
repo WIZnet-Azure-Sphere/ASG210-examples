@@ -36,7 +36,7 @@
 // azsphere_target_hardware_definition to "HardwareDefinitions/avnet_mt3620_sk".
 //
 // See https://aka.ms/AzureSphereHardwareDefinitions for more details.
-#include <hw/wiznet_asg210_v1.1.h>
+#include <hw/wiznet_asg210_v1.2.h>
 
 #include "eventloop_timer_utilities.h"
 #include "SSD1306.h"

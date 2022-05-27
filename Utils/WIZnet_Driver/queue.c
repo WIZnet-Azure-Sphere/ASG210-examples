@@ -94,7 +94,27 @@ void data_enqueue(str_qData* device, u8* data_p)
 
 void data_1dequeue(str_qData* device, u8* buf)
 {
+
+// 20210305 taylor
+#if 1
+    memcpy(buf, &device->pool[device->rp++], 1);
+#else
     memcpy(buf, &device->pool[device->rp++], (u32)sizeof(device->pool));
+#endif
+    if (device->rp == device->depth)
+    {
+        device->rp = 0;
+        device->ovr -= 1;
+    }
+}
+
+void data_ndequeue(str_qData* device, u8* buf, u32 len)
+{
+
+    memcpy(buf, &device->pool[device->rp], len);
+
+    device->rp += len;
+        
     if (device->rp == device->depth)
     {
         device->rp = 0;
@@ -134,7 +154,50 @@ u32 data_dequeue(str_qData* device, u8* buf, u32 len)
     #ifdef DEBUG_DATA_DEQUEUE
     printf("rlen = %#x\r\n", rlen);
     #endif
+
+// 20210311 taylor    
+#if 1
+    if (len > rlen)
+    {
+        len = rlen;
+    }
+    rlen = 0;
     
+    if(device->ovr)
+    {
+        rlen = (device->depth)-(device->rp);
+        #ifdef DEBUG_DATA_DEQUEUE
+        printf("len = %d rlen = %d\r\n", len, rlen);
+        #endif
+        
+        if(len > rlen)
+        {
+            // dequeue from device->rp to device->depth
+            #ifdef DEBUG_DATA_DEQUEUE
+            printf("1st read %d/%d\r\n", rlen, len);
+            #endif
+            data_ndequeue(device, buf, rlen);
+
+            // dequeue from 0 to device->wp
+            #ifdef DEBUG_DATA_DEQUEUE
+            printf("2nd read %d/%d\r\n", len-rlen, len);
+            #endif
+            data_ndequeue(device, buf+rlen, len-rlen);
+        }
+        else
+        {
+            rlen = 0;
+        }
+    }
+    
+    if(rlen == 0)
+    {
+        #ifdef DEBUG_DATA_DEQUEUE
+        printf("read %d\r\n", len);
+        #endif
+        data_ndequeue(device, buf, len);
+    }
+#else
     u32 i;
     if (len > rlen)
     {
@@ -145,6 +208,7 @@ u32 data_dequeue(str_qData* device, u8* buf, u32 len)
     {
         data_1dequeue(device, buf+i);
     }
+#endif
 
     #ifdef DEBUG_DATA_DEQUEUE
     printf("%s(%d)\r\n", __FILE__, __LINE__);
@@ -155,3 +219,42 @@ u32 data_dequeue(str_qData* device, u8* buf, u32 len)
 
     return len;
 }
+
+void data_queue_disp(str_qData* device)
+{
+    u32 i;
+
+    #ifdef DEBUG_DATA_DEQUEUE_DISP
+    printf("Start DEBUG_DATA_QUEUE_DISP\r\n");
+    #endif
+
+    #ifdef DEBUG_DATA_DEQUEUE_DISP
+    printf("ovr %d\r\n", device->ovr);
+    printf("rp %d\r\n", device->rp);
+    printf("wp %d\r\n", device->wp);
+    printf("depth %d\r\n", device->depth);
+    #endif
+    
+    for(i=0; i<device->depth; i++)
+    {
+        if(i%16 == 0)
+        {
+            printf("0x%.8x : ", i);
+        }
+        #if 0
+        printf("%c ", device->pool[i]);
+        #else
+        printf("0x%.2x ", device->pool[i]);
+        #endif
+        if(i!=0 && i%16 == 15)
+        {
+            printf("\r\n");
+        }
+    }
+    printf("\r\n");
+
+    #ifdef DEBUG_DATA_DEQUEUE_DISP
+    printf("End DEBUG_DATA_QUEUE_DISP\r\n");
+    #endif
+}
+

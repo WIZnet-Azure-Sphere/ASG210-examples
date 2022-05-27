@@ -340,6 +340,10 @@ int mtk_mhal_uart_sw_reset(struct mtk_uart_controller *ctlr);
  * Return "0" if dump UART register success.\n
  * Return -#UART_EPTR if ctlr is NULL.
  */
+// 20210310 taylor
+#if 1
+u32 mtk_mhal_uart_readreg(struct mtk_uart_controller* ctlr, u32 reg);
+#endif
 int mtk_mhal_uart_dumpreg(struct mtk_uart_controller *ctlr);
 
 /**
