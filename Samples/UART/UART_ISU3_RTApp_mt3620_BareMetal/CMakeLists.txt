@@ -6,12 +6,12 @@
 #  Copyright (c) Microsoft Corporation. All rights reserved.
 #  Licensed under the MIT License.
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 
 # Configurations
 project(UART_ISU3_RTApp_mt3620_BareMetal C)
 
-azsphere_configure_tools(TOOLS_REVISION "21.01")
+azsphere_configure_tools(TOOLS_REVISION "23.05")
 
 add_compile_definitions(OSAI_BARE_METAL)
 add_compile_definitions(OSAI_ENABLE_DMA)

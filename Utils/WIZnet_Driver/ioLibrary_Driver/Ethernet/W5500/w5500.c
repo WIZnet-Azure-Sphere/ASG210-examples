@@ -68,7 +68,14 @@
 #include "../../applibs_versions.h"
 #include <applibs/log.h>
 #include <applibs/spi.h>
+// 20230707 taylor
+#if 1
+// EVB V1.0
+#include <hw/wiznet_asg_evb_v1.0.h>
+#else
+// ASG 210
 #include <hw/wiznet_asg210_v1.2.h>
+#endif
 #else
 #include "printf.h"
 
@@ -101,10 +108,18 @@ uint8_t Init_SPIMaster(void)
 
     config.csPolarity = SPI_ChipSelectPolarity_ActiveLow;
 
+// 20230707 taylor
+#if 1
+    // EVB V1.0
+    // SPI_1 CS_A enable
+    spiFd = SPIMaster_Open(WIZNET_ASG_EVB_W5500_SPI, MT3620_SPI_CS_A, &config);
+#else
+    // ASG 210
 #if 0   // SPI_1 CS_A enable
     spiFd = SPIMaster_Open(AVNET_MT3620_SK_ISU1_SPI, MT3620_SPI_CS_A, &config);
 #else   // SPI_1 CS_B enable
     spiFd = SPIMaster_Open(WIZNET_ASG210_W5500_SPI, MT3620_SPI_CS_B, &config);
+#endif
 #endif
     Log_Debug("SPIMaster_Open() \n");
     if (spiFd < 0)

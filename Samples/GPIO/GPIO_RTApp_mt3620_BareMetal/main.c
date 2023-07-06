@@ -43,8 +43,6 @@
 #include "os_hal_gpt.h"
 #include "os_hal_gpio.h"
 
-#define USE_LED_BLT
-
 /******************************************************************************/
 /* Configurations */
 /******************************************************************************/
@@ -62,28 +60,23 @@ static const uint32_t gpt_timer_led_blinking_perios_ms = 500;
 static const uint32_t gpt_timer_button_scan_perios_ms = 100000;
 
 /* GPIO */
-/* GPIO_41 for LED_Red Control */
-static const uint8_t gpio_led_azure = OS_HAL_GPIO_41;
-/* GPIO_42 for LED_Green Control */
-static const uint8_t gpio_led_wifi = OS_HAL_GPIO_42;
-/* GPIO_43 for LED_Blue Control */
-static const uint8_t gpio_led_ethernet = OS_HAL_GPIO_43;
-/* GPIO_44 for LED_Blue Control */
-static const uint8_t gpio_led_interface = OS_HAL_GPIO_44;
-#ifdef USE_LED_BLT
-/* GPIO_45 for LED_Blue Control */
-static const uint8_t gpio_led_bluetooth = OS_HAL_GPIO_45;
-#endif
-/* GPIO_0 for Pin_A J5.2 */
-static const uint8_t gpio_pin_a = OS_HAL_GPIO_0;
-/* GPIO_1 for Pin_B J5.3*/
-static const uint8_t gpio_pin_b = OS_HAL_GPIO_1;
-/* GPIO_2 for Pin_C J5.4*/
-static const uint8_t gpio_pin_c = OS_HAL_GPIO_2;
-/* GPIO_3 for Pin_D J5.5*/
-static const uint8_t gpio_pin_d = OS_HAL_GPIO_3;
-/* GPIO_13 for Button_A USER_SW */
-static const uint8_t gpio_button_a = OS_HAL_GPIO_13;
+/* GPIO_58 for LED1_Control */
+static const uint8_t gpio_led1 = OS_HAL_GPIO_58;
+/* GPIO_46 for LED2 Control */
+static const uint8_t gpio_led2 = OS_HAL_GPIO_46;
+/* GPIO_60 for LED3 Control */
+static const uint8_t gpio_led3 = OS_HAL_GPIO_60;
+/* GPIO_45 for LED4 Control */
+static const uint8_t gpio_led4 = OS_HAL_GPIO_45;
+
+/* GPIO_56 */
+static const uint8_t gpio_pin_a = OS_HAL_GPIO_56;
+/* GPIO_59 */
+static const uint8_t gpio_pin_b = OS_HAL_GPIO_59;
+/* GPIO_57 */
+static const uint8_t gpio_pin_c = OS_HAL_GPIO_57;
+/* GPIO_13 for USER_SW */
+static const uint8_t gpio_button = OS_HAL_GPIO_13;
 
 
 /******************************************************************************/
@@ -102,126 +95,73 @@ void _putchar(char character)
 /******************************************************************************/
 static int gpio_output(u8 gpio_no, u8 level)
 {
-#if 1
-// 20201030 taylor
     mtk_os_hal_gpio_set_direction(gpio_no, OS_HAL_GPIO_DIR_OUTPUT);
     mtk_os_hal_gpio_set_output(gpio_no, level);
-#else
-    int ret;
-
-    ret = mtk_os_hal_gpio_request(gpio_no);
-    if (ret != 0)
-    {
-        printf("request gpio[%d] fail\n", gpio_no);
-        return ret;
-    }
-
-    mtk_os_hal_gpio_set_direction(gpio_no, OS_HAL_GPIO_DIR_OUTPUT);
-    mtk_os_hal_gpio_set_output(gpio_no, level);
-    ret = mtk_os_hal_gpio_free(gpio_no);
-    if (ret != 0)
-    {
-        printf("free gpio[%d] fail\n", gpio_no);
-        return 0;
-    }
-#endif
     return 0;
 }
 
 static int gpio_input(u8 gpio_no, os_hal_gpio_data *pvalue)
 {
-#if 1
-// 20201030 taylor
     mtk_os_hal_gpio_set_direction(gpio_no, OS_HAL_GPIO_DIR_INPUT);
     mtk_os_hal_gpio_get_input(gpio_no, pvalue);
-
-#else
-    u8 ret;
-
-    ret = mtk_os_hal_gpio_request(gpio_no);
-    if (ret != 0)
-    {
-        printf("request gpio[%d] fail\n", gpio_no);
-        return ret;
-    }
-    mtk_os_hal_gpio_set_direction(gpio_no, OS_HAL_GPIO_DIR_INPUT);
-    mtk_os_hal_gpio_get_input(gpio_no, pvalue);
-    ret = mtk_os_hal_gpio_free(gpio_no);
-    if (ret != 0)
-    {
-        printf("free gpio[%d] fail\n", gpio_no);
-        return ret;
-    }
-#endif
     return 0;
 }
 
 static void TimerHandlerGpt0(void *cb_data)
 {
     static bool ledOn = true;
-    uint8_t i;
 
     /* Toggle LED Status */
     ledOn = !ledOn;
-    printf("GPIO Output %d : %d\r\n", gpio_led_azure, ledOn);
-    gpio_output(gpio_led_azure, ledOn);
+    printf("GPIO Output %d : %d\r\n", gpio_led1, ledOn);
+    gpio_output(gpio_led1, ledOn);
 
-    /* Toggle GPIO(41~44) */
-#ifdef USE_LED_BLT
-    for (i = OS_HAL_GPIO_41 ; i <= OS_HAL_GPIO_44 ; i++)
-#else
-    for (i = OS_HAL_GPIO_41; i <= OS_HAL_GPIO_43; i++)
+    /* Toggle GPIO */
+#if 0
+    printf("GPIO Output %d : %d\r\n", gpio_led3, ledOn);
+    gpio_output(gpio_led3, ledOn);
+
+    printf("GPIO Output %d : %d\r\n", gpio_led4, ledOn);
+    gpio_output(gpio_led4, ledOn);
 #endif
-    {
-        printf("GPIO Output %d : %d\r\n", i, ledOn);
-        gpio_output(i, ledOn);
-    }
 
-    /* Toggle GPIO(0~3) */
-    for (i = OS_HAL_GPIO_0; i <= OS_HAL_GPIO_3; i++)
-    {
-        printf("GPIO Output %d : %d\r\n", i, ledOn);
-        gpio_output(i, ledOn);
-    }
+#if 0
+    printf("GPIO Output %d : %d\r\n", gpio_pin_a, ledOn);
+    gpio_output(gpio_pin_a, ledOn);
+
+    printf("GPIO Output %d : %d\r\n", gpio_pin_b, ledOn);
+    gpio_output(gpio_pin_b, ledOn);
+
+    printf("GPIO Output %d : %d\r\n", gpio_pin_c, ledOn);
+    gpio_output(gpio_pin_c, ledOn);
+#endif
 }
 
 static void TimerHandlerGpt3(void *cb_data)
 {
     os_hal_gpio_data button_status;
+    static os_hal_gpio_data button_prev;
 
-    /* Set LED_Blue according to Button_A */
-    gpio_input(gpio_button_a, &button_status);
-#ifdef USE_LED_BLT
-    if (button_status)
+    /* Set LED_Blue according to Button */
+    gpio_input(gpio_button, &button_status);
+
+    if (button_status != button_prev)
     {
-#if 0
-        printf("GPIO Input %d : %d -> ", gpio_button_a, button_status);
-        printf("GPIO Output %d : %d\r\n", gpio_led_bluetooth, OS_HAL_GPIO_DATA_HIGH);
-#endif
-        gpio_output(gpio_led_bluetooth, OS_HAL_GPIO_DATA_HIGH);
+        button_prev = button_status;
+
+        printf("GPIO Input %d : %d -> ", gpio_button, button_status);
+
+        if (button_status)
+        {
+            printf("GPIO Output %d : %d\r\n", gpio_led2, OS_HAL_GPIO_DATA_HIGH);
+            gpio_output(gpio_led2, OS_HAL_GPIO_DATA_HIGH);
+        }
+        else
+        {
+            printf("GPIO Output %d : %d\r\n", gpio_led2, OS_HAL_GPIO_DATA_LOW);
+            gpio_output(gpio_led2, OS_HAL_GPIO_DATA_LOW);
+        }
     }
-    else
-    {
-        printf("GPIO Input %d : %d -> ", gpio_button_a, button_status);
-        printf("GPIO Output %d : %d\r\n", gpio_led_bluetooth, OS_HAL_GPIO_DATA_HIGH);
-        gpio_output(gpio_led_bluetooth, OS_HAL_GPIO_DATA_LOW);
-    }
-#else
-    if (button_status)
-    {
-#if 0
-        printf("GPIO Input %d : %d -> ", gpio_button_a, button_status);
-        printf("GPIO Output %d : %d\r\n", gpio_led_interface, OS_HAL_GPIO_DATA_HIGH);
-#endif
-        gpio_output(gpio_led_interface, OS_HAL_GPIO_DATA_HIGH);
-    }
-    else
-    {
-        printf("GPIO Input %d : %d -> ", gpio_button_a, button_status);
-        printf("GPIO Output %d : %d\r\n", gpio_led_interface, OS_HAL_GPIO_DATA_LOW);
-        gpio_output(gpio_led_interface, OS_HAL_GPIO_DATA_LOW);
-    }
-#endif
 
     /* Restart GPT3 since it's one-shot mode. */
     mtk_os_hal_gpt_restart(gpt_timer_button);

@@ -1,12 +1,12 @@
 #  Copyright (c) Microsoft Corporation. All rights reserved.
 #  Licensed under the MIT License.
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 
 project(I2C_HLApp_mt3620_BareMetal C)
 
-azsphere_configure_tools(TOOLS_REVISION "21.01")
-azsphere_configure_api(TARGET_API_SET "12")
+azsphere_configure_tools(TOOLS_REVISION "23.05")
+azsphere_configure_api(TARGET_API_SET "16")
 
 add_executable(${PROJECT_NAME} main.c eventloop_timer_utilities.c)
 target_link_libraries(${PROJECT_NAME} applibs pthread gcc_s c)

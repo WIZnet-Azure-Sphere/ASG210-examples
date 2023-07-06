@@ -5,8 +5,18 @@
   "EntryPoint": "/bin/app",
   "CmdArgs": [],
   "Capabilities": {
-    "Gpio": [ "$WIZNET_ASG210_USER_BUTTON_SW2", "$WIZNET_ASG210_ISU3_N232_485_SEL", "$WIZNET_ASG210_ISU3_NSDA_RXD_SEL" ],
-    "Uart": [ "$WIZNET_ASG210_ISU3_UART" ]
+    "Gpio": [
+      "$WIZNET_ASG_EVB_USER_SW",
+      "$WIZNET_ASG_EVB_ISU1_UART_SEL",
+      "$WIZNET_ASG_EVB_ISU2_UART_SEL",
+      "$WIZNET_ASG_EVB_ISU3_UART_SEL",
+      "$WIZNET_ASG_EVB_ISU3_EXT_SEL"
+    ],
+    "Uart": [
+      "$WIZNET_ASG_EVB_ISU1_UART",
+      "$WIZNET_ASG_EVB_ISU2_UART",
+      "$WIZNET_ASG_EVB_ISU3_UART"
+    ]
   },
   "ApplicationType": "Default"
 }

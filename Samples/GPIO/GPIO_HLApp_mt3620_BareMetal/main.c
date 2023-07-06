@@ -36,7 +36,7 @@
 // azsphere_target_hardware_definition to "HardwareDefinitions/avnet_mt3620_sk".
 //
 // See https://aka.ms/AzureSphereHardwareDefinitions for more details.
-#include <hw/wiznet_asg210_v1.2.h>
+#include <hw/wiznet_asg_evb_v1.0.h>
 
 // This sample uses a single-thread event loop pattern.
 #include "eventloop_timer_utilities.h"
@@ -62,16 +62,25 @@ typedef enum
     ExitCode_Init_EventLoop = 7,
     ExitCode_Init_Button = 8,
     ExitCode_Init_ButtonPollTimer = 9,
-    ExitCode_Init_Led = 10,
-    ExitCode_Init_LedBlinkTimer = 11,
-    ExitCode_Main_EventLoopFail = 12
+    ExitCode_Init_Led1,
+    ExitCode_Init_LedBlinkTimer1,
+    ExitCode_Init_Led2,
+    ExitCode_Init_LedBlinkTimer2,
+    ExitCode_Init_Led3,
+    ExitCode_Init_LedBlinkTimer3,
+    ExitCode_Init_Led4,
+    ExitCode_Init_LedBlinkTimer4,
+    ExitCode_Main_EventLoopFail
 } ExitCode;
 
 // File descriptors - initialized to invalid value
 static EventLoop *eventLoop = NULL;
 static int ledBlinkRateButtonGpioFd = -1;
 static EventLoopTimer *buttonPollTimer = NULL;
-static int blinkingLedGpioFd = -1;
+static int blinkingLedGpioFd1 = -1;
+static int blinkingLedGpioFd2 = -1;
+static int blinkingLedGpioFd3 = -1;
+static int blinkingLedGpioFd4 = -1;
 static EventLoopTimer *blinkTimer = NULL;
 
 // Button state variables
@@ -119,10 +128,34 @@ static void BlinkingLedTimerEventHandler(EventLoopTimer *timer)
     // The blink interval has elapsed, so toggle the LED state
     // The LED is active-low so GPIO_Value_Low is on and GPIO_Value_High is off
     ledState = (ledState == GPIO_Value_Low ? GPIO_Value_High : GPIO_Value_Low);
-    int result = GPIO_SetValue(blinkingLedGpioFd, ledState);
+    int result = GPIO_SetValue(blinkingLedGpioFd1, ledState);
     if (result != 0)
     {
-        Log_Debug("ERROR: Could not set LED output value: %s (%d).\n", strerror(errno), errno);
+        Log_Debug("ERROR: Could not set LED1 output value: %s (%d).\n", strerror(errno), errno);
+        exitCode = ExitCode_LedTimer_SetLedState;
+        return;
+    }
+
+    result = GPIO_SetValue(blinkingLedGpioFd2, ledState);
+    if (result != 0)
+    {
+        Log_Debug("ERROR: Could not set LED2 output value: %s (%d).\n", strerror(errno), errno);
+        exitCode = ExitCode_LedTimer_SetLedState;
+        return;
+    }
+
+    result = GPIO_SetValue(blinkingLedGpioFd3, ledState);
+    if (result != 0)
+    {
+        Log_Debug("ERROR: Could not set LED3 output value: %s (%d).\n", strerror(errno), errno);
+        exitCode = ExitCode_LedTimer_SetLedState;
+        return;
+    }
+
+    result = GPIO_SetValue(blinkingLedGpioFd4, ledState);
+    if (result != 0)
+    {
+        Log_Debug("ERROR: Could not set LED4 output value: %s (%d).\n", strerror(errno), errno);
         exitCode = ExitCode_LedTimer_SetLedState;
         return;
     }
@@ -186,12 +219,12 @@ static ExitCode InitPeripheralsAndHandlers(void)
         return ExitCode_Init_EventLoop;
     }
 
-    // Open WIZNET_ASG210_USER_BUTTON_SW2 GPIO as input, and set up a timer to poll it
-    Log_Debug("Opening WIZNET_ASG210_USER_BUTTON_SW2 as input.\n");
-    ledBlinkRateButtonGpioFd = GPIO_OpenAsInput(WIZNET_ASG210_USER_BUTTON_SW2);
+    // Open WIZNET_ASG_EVB_USER_SW GPIO as input, and set up a timer to poll it
+    Log_Debug("Opening WIZNET_ASG_EVB_USER_SW as input.\n");
+    ledBlinkRateButtonGpioFd = GPIO_OpenAsInput(WIZNET_ASG_EVB_USER_SW);
     if (ledBlinkRateButtonGpioFd == -1)
     {
-        Log_Debug("ERROR: Could not open WIZNET_ASG210_USER_BUTTON_SW2: %s (%d).\n", strerror(errno), errno);
+        Log_Debug("ERROR: Could not open WIZNET_ASG_EVB_USER_SW: %s (%d).\n", strerror(errno), errno);
         return ExitCode_Init_Button;
     }
     struct timespec buttonPressCheckPeriod = {.tv_sec = 0, .tv_nsec = 1000000};
@@ -202,20 +235,51 @@ static ExitCode InitPeripheralsAndHandlers(void)
         return ExitCode_Init_ButtonPollTimer;
     }
 
-    // Open WIZNET_ASG210_STATUS_LED1_AZURE GPIO, set as output with value GPIO_Value_High (off), and set up a timer to
+    // Open WIZNET_ASG_EVB_STATUS_LD1, set as output with value GPIO_Value_High (off), and set up a timer to
     // blink it
-    Log_Debug("Opening WIZNET_ASG210_STATUS_LED1_AZURE as output.\n");
-    blinkingLedGpioFd = GPIO_OpenAsOutput(WIZNET_ASG210_STATUS_LED1_AZURE, GPIO_OutputMode_PushPull, GPIO_Value_High);
-    if (blinkingLedGpioFd == -1)
+    Log_Debug("Opening WIZNET_ASG_EVB_STATUS_LD1 as output.\n");
+    blinkingLedGpioFd1 = GPIO_OpenAsOutput(WIZNET_ASG_EVB_STATUS_LD1, GPIO_OutputMode_PushPull, GPIO_Value_High);
+    if (blinkingLedGpioFd1 == -1)
     {
-        Log_Debug("ERROR: Could not open WIZNET_ASG210_STATUS_LED1_AZURE GPIO: %s (%d).\n", strerror(errno), errno);
-        return ExitCode_Init_Led;
+        Log_Debug("ERROR: Could not open WIZNET_ASG_EVB_STATUS_LD1 GPIO: %s (%d).\n", strerror(errno), errno);
+        return ExitCode_Init_Led1;
     }
+
+    // Open WIZNET_ASG_EVB_STATUS_LD2, set as output with value GPIO_Value_High (off), and set up a timer to
+    // blink it
+    Log_Debug("Opening WIZNET_ASG_EVB_STATUS_LD2 as output.\n");
+    blinkingLedGpioFd2 = GPIO_OpenAsOutput(WIZNET_ASG_EVB_STATUS_LD2, GPIO_OutputMode_PushPull, GPIO_Value_High);
+    if (blinkingLedGpioFd2 == -1)
+    {
+        Log_Debug("ERROR: Could not open WIZNET_ASG_EVB_STATUS_LD2 GPIO: %s (%d).\n", strerror(errno), errno);
+        return ExitCode_Init_Led2;
+    }
+
+    // Open WIZNET_ASG_EVB_STATUS_LD3, set as output with value GPIO_Value_High (off), and set up a timer to
+    // blink it
+    Log_Debug("Opening WIZNET_ASG_EVB_STATUS_LD3 as output.\n");
+    blinkingLedGpioFd3 = GPIO_OpenAsOutput(WIZNET_ASG_EVB_STATUS_LD3, GPIO_OutputMode_PushPull, GPIO_Value_High);
+    if (blinkingLedGpioFd3 == -1)
+    {
+        Log_Debug("ERROR: Could not open WIZNET_ASG_EVB_STATUS_LD3 GPIO: %s (%d).\n", strerror(errno), errno);
+        return ExitCode_Init_Led3;
+    }
+
+    // Open WIZNET_ASG_EVB_STATUS_LD4, set as output with value GPIO_Value_High (off), and set up a timer to
+    // blink it
+    Log_Debug("Opening WIZNET_ASG_EVB_STATUS_LD4 as output.\n");
+    blinkingLedGpioFd4 = GPIO_OpenAsOutput(WIZNET_ASG_EVB_STATUS_LD4, GPIO_OutputMode_PushPull, GPIO_Value_High);
+    if (blinkingLedGpioFd4 == -1)
+    {
+        Log_Debug("ERROR: Could not open WIZNET_ASG_EVB_STATUS_LD4 GPIO: %s (%d).\n", strerror(errno), errno);
+        return ExitCode_Init_Led4;
+    }
+
     blinkTimer = CreateEventLoopPeriodicTimer(eventLoop, &BlinkingLedTimerEventHandler,
                  &blinkIntervals[blinkIntervalIndex]);
     if (blinkTimer == NULL)
     {
-        return ExitCode_Init_LedBlinkTimer;
+        return ExitCode_Init_LedBlinkTimer1;
     }
 
     return ExitCode_Success;
@@ -244,9 +308,9 @@ static void CloseFdAndPrintError(int fd, const char *fdName)
 static void ClosePeripheralsAndHandlers(void)
 {
     // Leave the LED off
-    if (blinkingLedGpioFd >= 0)
+    if (blinkingLedGpioFd1 >= 0)
     {
-        GPIO_SetValue(blinkingLedGpioFd, GPIO_Value_High);
+        GPIO_SetValue(blinkingLedGpioFd1, GPIO_Value_High);
     }
 
     DisposeEventLoopTimer(buttonPollTimer);
@@ -254,8 +318,8 @@ static void ClosePeripheralsAndHandlers(void)
     EventLoop_Close(eventLoop);
 
     Log_Debug("Closing file descriptors.\n");
-    CloseFdAndPrintError(blinkingLedGpioFd, "BlinkingLedGpio");
-    CloseFdAndPrintError(ledBlinkRateButtonGpioFd, "LedBlinkRateButtonGpio");
+    CloseFdAndPrintError(blinkingLedGpioFd1, "BlinkingLedGpio");
+    CloseFdAndPrintError(ledBlinkRateButtonGpioFd, "LedBlinkRateButtonGpio1");
 }
 
 /// <summary>

@@ -45,7 +45,7 @@
 // azsphere_target_hardware_definition to "HardwareDefinitions/avnet_mt3620_sk".
 //
 // See https://aka.ms/AzureSphereHardwareDefinitions for more details.
-#include <hw/wiznet_asg210_v1.2.h>
+#include <hw/wiznet_asg_evb_v1.0.h>
 
 // This sample uses a single-thread event loop pattern.
 #include "eventloop_timer_utilities.h"
@@ -86,7 +86,6 @@ static EventLoopTimer *buttonPollTimer = NULL;
 static int blinkingLedGpioFd = -1;
 static EventLoopTimer *blinkTimer = NULL;
 static int w5500resetGpioFd = -1;
-static int w5500readyGpioFd = -1;
 static EventLoopTimer* dhcpsTimer = NULL;
 
 // Button state variables
@@ -122,14 +121,13 @@ wiz_NetInfo gWIZNETINFO =
 };
 
 #else
-// Network Configuration, it sets by the TinyMCU
 wiz_NetInfo gWIZNETINFO =
 {
-    {0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0},
-    {0, 0, 0, 0},
-    {0, 0, 0, 0},
-    {0, 0, 0, 0},
+    {0x00, 0x08, 0xdc, 0xff, 0xfa, 0xfb},
+    {192, 168, 50, 1},
+    {255, 255, 255, 0},
+    {192, 168, 50, 1},
+    {8, 8, 8, 8},
 #ifdef NETINFO_USE_DHCP
     NETINFO_DHCP
 #else
@@ -261,12 +259,12 @@ static ExitCode InitPeripheralsAndHandlers(void)
         return ExitCode_Init_EventLoop;
     }
 
-    // Open WIZNET_ASG210_USER_BUTTON_SW2 GPIO as input, and set up a timer to poll it
-    Log_Debug("Opening WIZNET_ASG210_USER_BUTTON_SW2 as input.\n");
-    ledBlinkRateButtonGpioFd = GPIO_OpenAsInput(WIZNET_ASG210_USER_BUTTON_SW2);
+    // Open WIZNET_ASG_EVB_USER_SW GPIO as input, and set up a timer to poll it
+    Log_Debug("Opening WIZNET_ASG_EVB_USER_SW as input.\n");
+    ledBlinkRateButtonGpioFd = GPIO_OpenAsInput(WIZNET_ASG_EVB_USER_SW);
     if (ledBlinkRateButtonGpioFd == -1)
     {
-        Log_Debug("ERROR: Could not open WIZNET_ASG210_USER_BUTTON_SW2: %s (%d).\n", strerror(errno), errno);
+        Log_Debug("ERROR: Could not open WIZNET_ASG_EVB_USER_SW: %s (%d).\n", strerror(errno), errno);
         return ExitCode_Init_Button;
     }
     struct timespec buttonPressCheckPeriod = {.tv_sec = 0, .tv_nsec = 1000000};
@@ -277,13 +275,13 @@ static ExitCode InitPeripheralsAndHandlers(void)
         return ExitCode_Init_ButtonPollTimer;
     }
 
-    // Open WIZNET_ASG210_STATUS_LED1_AZURE GPIO, set as output with value GPIO_Value_High (off), and set up a timer to
+    // Open WIZNET_ASG_EVB_STATUS_LD1 GPIO, set as output with value GPIO_Value_High (off), and set up a timer to
     // blink it
-    Log_Debug("Opening WIZNET_ASG210_STATUS_LED1_AZURE as output.\n");
-    blinkingLedGpioFd = GPIO_OpenAsOutput(WIZNET_ASG210_STATUS_LED1_AZURE, GPIO_OutputMode_PushPull, GPIO_Value_High);
+    Log_Debug("Opening WIZNET_ASG_EVB_STATUS_LD1 as output.\n");
+    blinkingLedGpioFd = GPIO_OpenAsOutput(WIZNET_ASG_EVB_STATUS_LD1, GPIO_OutputMode_PushPull, GPIO_Value_High);
     if (blinkingLedGpioFd == -1)
     {
-        Log_Debug("ERROR: Could not open WIZNET_ASG210_STATUS_LED1_AZURE GPIO: %s (%d).\n", strerror(errno), errno);
+        Log_Debug("ERROR: Could not open WIZNET_ASG_EVB_STATUS_LD1 GPIO: %s (%d).\n", strerror(errno), errno);
         return ExitCode_Init_Led;
     }
     blinkTimer = CreateEventLoopPeriodicTimer(eventLoop, &BlinkingLedTimerEventHandler,
@@ -293,20 +291,12 @@ static ExitCode InitPeripheralsAndHandlers(void)
         return ExitCode_Init_LedBlinkTimer;
     }
 
-    Log_Debug("Opening $WIZNET_ASG210_W5500_RESET as output.\n");
-    w5500resetGpioFd = GPIO_OpenAsOutput(WIZNET_ASG210_W5500_RESET, GPIO_OutputMode_PushPull, GPIO_Value_Low);
+    Log_Debug("Opening WIZNET_ASG_EVB_W5500_RESET as output.\n");
+    w5500resetGpioFd = GPIO_OpenAsOutput(WIZNET_ASG_EVB_W5500_RESET, GPIO_OutputMode_PushPull, GPIO_Value_Low);
     sleep(1);
     if (w5500resetGpioFd == -1)
     {
-        Log_Debug("ERROR: Could not open WIZNET_ASG210_W5500_RESET GPIO: %s (%d).\n", strerror(errno), errno);
-        return ExitCode_Init_Led;
-    }
-
-    Log_Debug("Opening $WIZNET_ASG210_W5500_NRDY as input.\n");
-    w5500readyGpioFd = GPIO_OpenAsInput(WIZNET_ASG210_W5500_NRDY);
-    if (w5500readyGpioFd == -1)
-    {
-        Log_Debug("ERROR: Could not open WIZNET_ASG210_W5500_NRDY GPIO: %s (%d).\n", strerror(errno), errno);
+        Log_Debug("ERROR: Could not open WIZNET_ASG_EVB_W5500_RESET GPIO: %s (%d).\n", strerror(errno), errno);
         return ExitCode_Init_Led;
     }
 
@@ -372,28 +362,8 @@ void InitPrivateNetInfo(void)
     }
     sleep(1);
 
-    // Check for a button press
-    GPIO_Value_Type w5500ready;
-    result = GPIO_GetValue(w5500readyGpioFd, &w5500ready);
-    if (result != 0)
-    {
-        Log_Debug("ERROR: Could not read button GPIO: %s (%d).\n", strerror(errno), errno);
-    }
-
-    if (w5500ready == GPIO_Value_Low)
-    {
-        Log_Debug("w5500 not ready!\n");
-    }
-    else
-    {
-        Log_Debug("w5500ready!\n");
-    }
-    sleep(1);
-
     wizchip_setnetinfo_partial(&gWIZNETINFO);
-    Log_Debug("Network Configuration from TinyMCU\r\n");
 
-#ifdef NETINFO_USE_MANUAL
     if (ctlnetwork(CN_SET_NETINFO, (void*)&gWIZNETINFO) < 0)
     {
         Log_Debug("ERROR: ctlnetwork SET\r\n");
@@ -410,10 +380,6 @@ void InitPrivateNetInfo(void)
         Log_Debug("ERROR: NETINFO not matched\r\n");
         while (1);
     }
-
-#else
-    ctlnetwork(CN_GET_NETINFO, (void*)&gWIZNETINFO);
-#endif
 
     Log_Debug("\r\n=== %s NET CONF ===\r\n", (char*)tmpstr);
     Log_Debug("MAC: %02X:%02X:%02X:%02X:%02X:%02X\r\n", gWIZNETINFO.mac[0], gWIZNETINFO.mac[1], gWIZNETINFO.mac[2],

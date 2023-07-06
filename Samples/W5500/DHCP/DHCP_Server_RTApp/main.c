@@ -62,7 +62,7 @@ static const uint8_t gpt_timer_dhcps = OS_HAL_GPT0;
 static const uint32_t gpt_timer_dhcps_perios_ms = 1000;
 #endif
 
-uint8_t spi_master_port_num = OS_HAL_SPIM_ISU1;
+uint8_t spi_master_port_num = OS_HAL_SPIM_ISU0;
 uint32_t spi_master_speed = 2 * 10 * 1000; /* KHz */
 
 #define SPIM_CLOCK_POLARITY SPI_CPOL_0
@@ -81,7 +81,7 @@ struct mtk_spi_config spi_default_config =
     .cpha = SPIM_CLOCK_PHASE,
     .rx_mlsb = SPIM_RX_MLSB,
     .tx_mlsb = SPIM_TX_MSLB,
-#if 1
+#if 0
     // 20200527 taylor
     // W5500 NCS
     .slave_sel = SPI_SELECT_DEVICE_1,
@@ -117,11 +117,11 @@ wiz_NetInfo gWIZNETINFO =
 // Network Configuration, it sets by the TinyMCU
 wiz_NetInfo gWIZNETINFO =
 {
-    {0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0},
-    {0, 0, 0, 0},
-    {0, 0, 0, 0},
-    {0, 0, 0, 0},
+    {0x00, 0x08, 0xdc, 0xff, 0xfa, 0xfb},
+    {192, 168, 50, 1},
+    {255, 255, 255, 0},
+    {192, 168, 50, 1},
+    {8, 8, 8, 8},
 #ifdef NETINFO_USE_DHCP
     NETINFO_DHCP
 #else
@@ -144,6 +144,12 @@ uint8_t gsntpDATABUF[DATA_BUF_SIZE];
 #endif
 
 /* GPIO */
+// 20230707 taylor
+// ASG EVB V1.0
+#if 1
+static const uint8_t gpio_w5500_reset = OS_HAL_GPIO_2;
+static const uint8_t gpio_w5500_int = OS_HAL_GPIO_5;
+#else
 #if 1
 // 20220516 taylor
 // ASG210 V1.2
@@ -156,6 +162,7 @@ static const uint8_t gpio_w5500_reset = OS_HAL_GPIO_12;
 #if 0
 static const uint8_t gpio_w5500_ready = OS_HAL_GPIO_47;
 static const uint8_t gpio_w5500_int = OS_HAL_GPIO_48;
+#endif
 #endif
 #endif
 
@@ -202,11 +209,13 @@ void w5500_init()
 // 20210329
 // ASG210 V1.2
 // W5500 ready check
+#if 0
     os_hal_gpio_data w5500_ready;
     do
     {
         gpio_input(gpio_w5500_ready, &w5500_ready);
     } while (!w5500_ready);
+#endif
 
 // 20210222 taylor
 // Ignored ready check
@@ -224,8 +233,14 @@ void w5500_init()
 
     osai_delay_ms(100);
 
+// 20230707 taylor
+#if 1
+    // ASG EVB
+    wizchip_setnetinfo(&gWIZNETINFO);
+#else
     wizchip_setnetinfo_partial(&gWIZNETINFO);
     printf("Network Configuration from TinyMCU\r\n");
+#endif
     InitPrivateNetInfo();
 }
 

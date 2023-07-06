@@ -39,9 +39,12 @@
 // azsphere_target_hardware_definition to "HardwareDefinitions/avnet_mt3620_sk".
 //
 // See https://aka.ms/AzureSphereHardwareDefinitions for more details.
-#include <hw/wiznet_asg210_v1.2.h>
+#include <hw/wiznet_asg_evb_v1.0.h>
 
 #include "eventloop_timer_utilities.h"
+
+// 1 / 2 / 3
+#define USE_ISU 1
 
 /// <summary>
 /// Exit codes for this application. These are used for the
@@ -67,8 +70,9 @@ typedef enum
 // File descriptors - initialized to invalid value
 static int uartFd = -1;
 static int gpioButtonFd = -1;
-static int gpioNRS232Fd = -1;
-static int gpioNSCL = -1;
+static int gpioISU1_SEL = -1;
+static int gpioISU2_SEL = -1;
+static int gpioISU3_SEL = -1;
 
 EventLoop *eventLoop = NULL;
 EventRegistration *uartEventReg = NULL;
@@ -212,19 +216,39 @@ static ExitCode InitPeripheralsAndHandlers(void)
         return ExitCode_Init_EventLoop;
     }
 
-    // Open WIZNET_ASG210_ISU3_N232_485_SEL GPIO, set as output with value GPIO_Value_Low for using RS232 instead of RS485
-    Log_Debug("Opening WIZNET_ASG210_ISU3_N232_485_SEL as output.\n");
-    gpioNRS232Fd = GPIO_OpenAsOutput(WIZNET_ASG210_ISU3_N232_485_SEL, GPIO_OutputMode_PushPull, GPIO_Value_Low);
-    if (gpioNRS232Fd == -1)
+#if USE_ISU == 1
+    // Open WIZNET_ASG_EVB_ISU1_UART_NSEL GPIO, set as output with value GPIO_Value_High for using UART
+    Log_Debug("Opening WIZNET_ASG_EVB_ISU1_UART_NSEL as output.\n");
+    gpioISU1_SEL = GPIO_OpenAsOutput(WIZNET_ASG_EVB_ISU1_UART_SEL, GPIO_OutputMode_PushPull, GPIO_Value_High);
+    if (gpioISU1_SEL == -1)
     {
         Log_Debug("ERROR: Could not open button GPIO: %s (%d).\n", strerror(errno), errno);
         return ExitCode_Init_OpenButton;
     }
+#elif USE_ISU == 2
+    // Open WIZNET_ASG_EVB_ISU2_UART_NSEL GPIO, set as output with value GPIO_Value_High for using UART
+    Log_Debug("Opening WIZNET_ASG_EVB_ISU2_UART_NSEL as output.\n");
+    gpioISU2_SEL = GPIO_OpenAsOutput(WIZNET_ASG_EVB_ISU2_UART_SEL, GPIO_OutputMode_PushPull, GPIO_Value_High);
+    if (gpioISU2_SEL == -1)
+    {
+        Log_Debug("ERROR: Could not open button GPIO: %s (%d).\n", strerror(errno), errno);
+        return ExitCode_Init_OpenButton;
+    }
+#elif USE_ISU == 3
+    // Open WIZNET_ASG_EVB_ISU3_UART_SEL GPIO, set as output with value GPIO_Value_High for using UART
+    Log_Debug("Opening WIZNET_ASG_EVB_ISU3_UART_SEL as output.\n");
+    gpioISU3_SEL = GPIO_OpenAsOutput(WIZNET_ASG_EVB_ISU3_UART_SEL, GPIO_OutputMode_PushPull, GPIO_Value_High);
+    if (gpioISU3_SEL == -1)
+    {
+        Log_Debug("ERROR: Could not open button GPIO: %s (%d).\n", strerror(errno), errno);
+        return ExitCode_Init_OpenButton;
+    }
+#endif
 
-    // Open WIZNET_ASG210_ISU3_NSDA_RXD_SEL GPIO, set as output with value GPIO_Value_High for using RXD3 instead of I2C_SDA
-    Log_Debug("Opening WIZNET_ASG210_ISU3_NSDA_RXD_SEL as output.\n");
-    gpioNSCL = GPIO_OpenAsOutput(WIZNET_ASG210_ISU3_NSDA_RXD_SEL, GPIO_OutputMode_PushPull, GPIO_Value_High);
-    if (gpioNSCL == -1)
+    // Open WIZNET_ASG_EVB_ISU3_EXT_SEL GPIO, set as output with value GPIO_Value_High for External
+    Log_Debug("Opening WIZNET_ASG_EVB_ISU3_EXT_SEL as output.\n");
+    gpioISU3_SEL = GPIO_OpenAsOutput(WIZNET_ASG_EVB_ISU3_EXT_SEL, GPIO_OutputMode_PushPull, GPIO_Value_High);
+    if (gpioISU3_SEL == -1)
     {
         Log_Debug("ERROR: Could not open button GPIO: %s (%d).\n", strerror(errno), errno);
         return ExitCode_Init_OpenButton;
@@ -235,7 +259,15 @@ static ExitCode InitPeripheralsAndHandlers(void)
     UART_InitConfig(&uartConfig);
     uartConfig.baudRate = 115200;
     uartConfig.flowControl = UART_FlowControl_None;
-    uartFd = UART_Open(WIZNET_ASG210_ISU3_UART, &uartConfig);
+#if USE_ISU == 1
+    uartFd = UART_Open(WIZNET_ASG_EVB_ISU1_UART, &uartConfig);
+#elif USE_ISU == 2
+    uartFd = UART_Open(WIZNET_ASG_EVB_ISU2_UART, &uartConfig);
+#elif USE_ISU == 3
+    uartFd = UART_Open(WIZNET_ASG_EVB_ISU3_UART, &uartConfig);
+#else
+#error "USE_ISU Not defined"
+#endif
     if (uartFd == -1)
     {
         Log_Debug("ERROR: Could not open UART: %s (%d).\n", strerror(errno), errno);
@@ -247,9 +279,9 @@ static ExitCode InitPeripheralsAndHandlers(void)
         return ExitCode_Init_RegisterIo;
     }
 
-    // Open WIZNET_ASG210_USER_BUTTON_SW2 GPIO as input, and set up a timer to poll it
-    Log_Debug("Opening WIZNET_ASG210_USER_BUTTON_SW2 as input.\n");
-    gpioButtonFd = GPIO_OpenAsInput(WIZNET_ASG210_USER_BUTTON_SW2);
+    // Open WIZNET_ASG_EVB_USER_SW GPIO as input, and set up a timer to poll it
+    Log_Debug("Opening WIZNET_ASG_EVB_USER_SW as input.\n");
+    gpioButtonFd = GPIO_OpenAsInput(WIZNET_ASG_EVB_USER_SW);
     if (gpioButtonFd == -1)
     {
         Log_Debug("ERROR: Could not open button GPIO: %s (%d).\n", strerror(errno), errno);
@@ -295,7 +327,7 @@ static void ClosePeripheralsAndHandlers(void)
     Log_Debug("Closing file descriptors.\n");
     CloseFdAndPrintError(gpioButtonFd, "GpioButton");
     CloseFdAndPrintError(uartFd, "Uart");
-    CloseFdAndPrintError(gpioNRS232Fd, "GpioNRS232");
+    CloseFdAndPrintError(gpioISU1_SEL, "GpioNRS232");
 }
 
 /// <summary>

@@ -5,8 +5,15 @@
   "EntryPoint": "/bin/app",
   "CmdArgs": [],
   "Capabilities": {
-    "Gpio": [ "$WIZNET_ASG210_USER_BUTTON_SW2", "$WIZNET_ASG210_STATUS_LED1_AZURE", "$WIZNET_ASG210_W5500_RESET", "$WIZNET_ASG210_W5500_NRDY" ],
-    "SpiMaster": [ "$WIZNET_ASG210_W5500_SPI" ]
+    "Gpio": [
+      "$WIZNET_ASG_EVB_USER_SW",
+      "$WIZNET_ASG_EVB_STATUS_LD1",
+      "$WIZNET_ASG_EVB_W5500_RESET",
+      "$WIZNET_ASG_EVB_W5500_INTN"
+    ],
+    "SpiMaster": [
+      "$WIZNET_ASG_EVB_W5500_SPI"
+    ]
   }, 
   "ApplicationType": "Default"
 }

@@ -1,0 +1,18 @@
+{
+  "SchemaVersion": 1,
+  "Name": "DHCP_HighLevelApp",
+  "ComponentId": "CD359CC1-4AAC-414E-8D26-8ACB71DDBA6D",
+  "EntryPoint": "/bin/app",
+  "CmdArgs": [],
+  "Capabilities": {
+    "NetworkConfig": true,
+    "Gpio": [
+      "$WIZNET_ASG_EVB_USER_SW",
+      "$WIZNET_ASG_EVB_STATUS_LD1",
+      "$WIZNET_ASG_EVB_STATUS_LD2",
+      "$WIZNET_ASG_EVB_STATUS_LD3"
+    ]
+  },
+  "ApplicationType": "Default",
+  "MallocVersion": 2
+}

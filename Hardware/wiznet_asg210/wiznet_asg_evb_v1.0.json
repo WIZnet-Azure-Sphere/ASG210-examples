@@ -17,11 +17,10 @@
     },
     "Imports" : [ {"Path": "../usi_mt3620_bt/usi_mt3620_bt.json"} ],
     "Peripherals": [
-        {"Name": "WIZNET_ASG_EVB_STATUS_LED1_AZURE", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN94_GPIO58", "Comment": "AZURE Connection status LED uses GPIO58."},
-        {"Name": "WIZNET_ASG_EVB_STATUS_LED2_WIFI", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN23_GPIO46", "Comment": "WiFi Connection status LED uses GPIO46 and ADC5."},
-        {"Name": "WIZNET_ASG_EVB_STATUS_LED3_ETHERNET", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN93_GPIO60", "Comment": "WLAN Connection status LED uses GPIO60."},
-        {"Name": "WIZNET_ASG_EVB_STATUS_LED4_INTERFACE", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN25_GPIO44", "Comment": "Interface Connection status LED uses GPIO44 and ADC3."},
-        {"Name": "WIZNET_ASG_EVB_STATUS_LED5_BLUETOOTH", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN24_GPIO45", "Comment": "BLE Connection status LED uses GPIO45 and ADC4."},
+        {"Name": "WIZNET_ASG_EVB_STATUS_LD1", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN94_GPIO58", "Comment": "AZURE Connection status LED uses GPIO58."},
+        {"Name": "WIZNET_ASG_EVB_STATUS_LD2", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN23_GPIO46", "Comment": "WiFi Connection status LED uses GPIO46 and ADC5."},
+        {"Name": "WIZNET_ASG_EVB_STATUS_LD3", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN93_GPIO60", "Comment": "WLAN Connection status LED uses GPIO60."},
+        {"Name": "WIZNET_ASG_EVB_STATUS_LD4", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN24_GPIO45", "Comment": "BLE Connection status LED uses GPIO45 and ADC4."},
 
         {"Name": "WIZNET_ASG_EVB_GPIO56", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN1_GPIO56", "Comment": " GPIO56."},
         {"Name": "WIZNET_ASG_EVB_GPIO59", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN2_GPIO59", "Comment": " GPIO59."},
@@ -33,15 +32,15 @@
         {"Name": "WIZNET_ASG_EVB_ISU1_SPI", "Type": "SpiMaster", "Mapping": "USI_MT3620_BT_COMBO_ISU1_SPI", "Comment": "ISU 1 configured as SPI, pin 40 (MISO), pin 42 (SCLK), pin 39 (CSA) and pin 41 (MOSI)."},
         {"Name": "WIZNET_ASG_EVB_ISU1_I2C", "Type": "I2cMaster", "Mapping": "USI_MT3620_BT_COMBO_ISU1_I2C", "Comment": "ISU 1 configured as I2C,  pin 40 (SDA) and pin 41 (SCL)."},
 
-        {"Name": "WIZNET_ASG_EVB_ISU1_UART_NSEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN63_GPIO6", "Comment": "Select ISU1 as UART."},
-        {"Name": "WIZNET_ASG_EVB_ISU1_SPI_SEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN63_GPIO6", "Comment": "Select ISU1 as SPI."},
+        {"Name": "WIZNET_ASG_EVB_ISU1_UART_SEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN63_GPIO6", "Comment": "Select ISU1 as UART."},
+        {"Name": "WIZNET_ASG_EVB_ISU1_SPI_NSEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN63_GPIO6", "Comment": "Select ISU1 as SPI."},
 
         {"Name": "WIZNET_ASG_EVB_ISU2_UART", "Type": "Uart", "Mapping": "USI_MT3620_BT_COMBO_ISU2_UART", "Comment": "ISU 2 configured as UART, pin 35 (RX), pin 37 (TX), pin 34 (CTS) and pin 36 (RTS)."},
         {"Name": "WIZNET_ASG_EVB_ISU2_SPI", "Type": "SpiMaster", "Mapping": "USI_MT3620_BT_COMBO_ISU2_SPI", "Comment": "ISU 2 configured as SPI, pin 35 (MISO), pin 37 (SCLK), pin 34 (CSA) and pin 36 (MOSI)."},
         {"Name": "WIZNET_ASG_EVB_ISU2_I2C", "Type": "I2cMaster", "Mapping": "USI_MT3620_BT_COMBO_ISU2_I2C", "Comment": "ISU 2 configured as I2C,  pin 35 (SDA) and pin 36 (SCL)."},
 
-        {"Name": "WIZNET_ASG_EVB_ISU2_UART_NSEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN62_GPIO7", "Comment": "Select ISU2 as UART."},
-        {"Name": "WIZNET_ASG_EVB_ISU2_SPI_SEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN62_GPIO7", "Comment": "Select ISU2 as SPI."},
+        {"Name": "WIZNET_ASG_EVB_ISU2_UART_SEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN62_GPIO7", "Comment": "Select ISU2 as UART."},
+        {"Name": "WIZNET_ASG_EVB_ISU2_SPI_NSEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN62_GPIO7", "Comment": "Select ISU2 as SPI."},
         
         {"Name": "WIZNET_ASG_EVB_ISU3_UART", "Type": "Uart", "Mapping": "USI_MT3620_BT_COMBO_ISU3_UART", "Comment": "ISU 3 configured as UART, pin 89 (RX), pin 91 (TX), pin 87 (CTS) and pin 90 (RTS)."},
         {"Name": "WIZNET_ASG_EVB_ISU3_SPI", "Type": "SpiMaster", "Mapping": "USI_MT3620_BT_COMBO_ISU3_SPI", "Comment": "ISU 3 configured as SPI, pin 89 (MISO), pin 91 (SCLK), pin 87 (CSA) and pin 90 (MOSI)."},
@@ -57,15 +56,45 @@
         {"Name": "WIZNET_ASG_EVB_ADC", "Type": "Adc", "Mapping": "USI_MT3620_BT_COMBO_ADC_CONTROLLER0", "Comment": "Select ADC 0-7."},
 
         {"Name": "WIZNET_ASG_EVB_MB1_RST", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN69_GPIO0", "Comment": "Select GPIO0 as MB1 RST."},
-        {"Name": "WIZNET_ASG_EVB_MB2_RST", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN66_GPIO3", "Comment": "Select GPIO3 as MB2 RST."},
-
         {"Name": "WIZNET_ASG_EVB_MB1_INT", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN68_GPIO1", "Comment": "Select GPIO1 as MB1 INT."},
+        {"Name": "WIZNET_ASG_EVB_MB1_UART", "Type": "Uart", "Mapping": "USI_MT3620_BT_COMBO_ISU1_UART", "Comment": "ISU 1 configured as UART, pin 40 (RX), pin 42 (TX), pin 39 (CTS) and pin 41 (RTS)."},
+        {"Name": "WIZNET_ASG_EVB_MB1_UART_NSEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN63_GPIO6", "Comment": "Select ISU1 as UART."},
+        {"Name": "WIZNET_ASG_EVB_MB1_SPI", "Type": "SpiMaster", "Mapping": "USI_MT3620_BT_COMBO_ISU1_SPI", "Comment": "ISU 1 configured as SPI, pin 40 (MISO), pin 42 (SCLK), pin 39 (CSA) and pin 41 (MOSI)."},
+        {"Name": "WIZNET_ASG_EVB_MB1_SPI_SEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN63_GPIO6", "Comment": "Select ISU1 as SPI."},
+        {"Name": "WIZNET_ASG_EVB_MB1_SPI_NCS", "Type": "int", "Mapping": "USI_MT3620_BT_COMBO_PIN39_GPIO34", "Comment": "ISU1 SPI CSA."},
+        {"Name": "WIZNET_ASG_EVB_MB1_I2C", "Type": "I2cMaster", "Mapping": "USI_MT3620_BT_COMBO_ISU3_I2C", "Comment": "ISU 3 configured as I2C,  pin 89 (SDA) and pin 90 (SCL)."},
+        {"Name": "WIZNET_ASG_EVB_MB1_I2C_NSEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN54_GPIO14", "Comment": "Select ISU3 as I2C."},
+        {"Name": "WIZNET_ASG_EVB_MB1_I2C_INT_NSEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN56_GPIO12", "Comment": "Select ISU3 mB1/mB2 internal header."},
+
+        {"Name": "WIZNET_ASG_EVB_MB2_RST", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN66_GPIO3", "Comment": "Select GPIO3 as MB2 RST."},
         {"Name": "WIZNET_ASG_EVB_MB2_INT", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN65_GPIO4", "Comment": "Select GPIO4 as MB2 INT."},
+        {"Name": "WIZNET_ASG_EVB_MB2_UART", "Type": "Uart", "Mapping": "USI_MT3620_BT_COMBO_ISU2_UART", "Comment": "ISU 2 configured as UART, pin 35 (RX), pin 37 (TX), pin 34 (CTS) and pin 36 (RTS)."},
+        {"Name": "WIZNET_ASG_EVB_MB2_UART_NSEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN62_GPIO7", "Comment": "Select ISU2 as UART."},
+        {"Name": "WIZNET_ASG_EVB_MB2_SPI", "Type": "SpiMaster", "Mapping": "USI_MT3620_BT_COMBO_ISU2_SPI", "Comment": "ISU 2 configured as SPI, pin 35 (MISO), pin 37 (SCLK), pin 34 (CSA) and pin 36 (MOSI)."},
+        {"Name": "WIZNET_ASG_EVB_MB2_SPI_SEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN62_GPIO7", "Comment": "Select ISU2 as SPI."},
+        {"Name": "WIZNET_ASG_EVB_MB2_SPI_NCS", "Type": "int", "Mapping": "USI_MT3620_BT_COMBO_PIN34_GPIO39", "Comment": "ISU2 SPI CSA."},
+        {"Name": "WIZNET_ASG_EVB_MB2_I2C", "Type": "I2cMaster", "Mapping": "USI_MT3620_BT_COMBO_ISU3_I2C", "Comment": "ISU 3 configured as I2C,  pin 89 (SDA) and pin 90 (SCL)."},
+        {"Name": "WIZNET_ASG_EVB_MB2_I2C_NSEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN54_GPIO14", "Comment": "Select ISU3 as I2C."},
+        {"Name": "WIZNET_ASG_EVB_MB2_I2C_INT_NSEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN56_GPIO12", "Comment": "Select ISU3 mB1/mB2 internal header."},
+
+        {"Name": "WIZNET_ASG_EVB_GROVE_I2C", "Type": "I2cMaster", "Mapping": "USI_MT3620_BT_COMBO_ISU3_I2C", "Comment": "ISU 3 configured as I2C,  pin 89 (SDA) and pin 90 (SCL)."},
+        {"Name": "WIZNET_ASG_EVB_GROVE_I2C_NSEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN54_GPIO14", "Comment": "Select ISU3 as I2C."},
+        {"Name": "WIZNET_ASG_EVB_GROVE_I2C_INT_NSEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN56_GPIO12", "Comment": "Select ISU3 mB1/mB2 internal header."},
+
+        {"Name": "WIZNET_ASG_EVB_GROVE_UART", "Type": "Uart", "Mapping": "USI_MT3620_BT_COMBO_ISU3_UART", "Comment": "ISU 3 configured as UART, pin 89 (RX), pin 91 (TX), pin 87 (CTS) and pin 90 (RTS)."},
+        {"Name": "WIZNET_ASG_EVB_GROVE_UART_SEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN54_GPIO14", "Comment": "Select ISU3 as UART."},
+        {"Name": "WIZNET_ASG_EVB_GROVE_UART_INT_NSEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN56_GPIO12", "Comment": "Select ISU3 mB1/mB2 internal header."},
+
+        {"Name": "WIZNET_ASG_EVB_J6_I2C", "Type": "I2cMaster", "Mapping": "USI_MT3620_BT_COMBO_ISU3_I2C", "Comment": "ISU 3 configured as I2C,  pin 89 (SDA) and pin 90 (SCL)."},
+        {"Name": "WIZNET_ASG_EVB_J6_UART", "Type": "Uart", "Mapping": "USI_MT3620_BT_COMBO_ISU3_UART", "Comment": "ISU 3 configured as UART, pin 89 (RX), pin 91 (TX), pin 87 (CTS) and pin 90 (RTS)."},
+        {"Name": "WIZNET_ASG_EVB_J6_EXT_SEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN56_GPIO12", "Comment": "Select ISU3 external header and also can configured as UART, SPI and I2C."},
+        {"Name": "WIZNET_ASG_EVB_GPIO70", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN88_GPIO70", "Comment": " GPIO70."},
+        {"Name": "WIZNET_ASG_EVB_GPIO69", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN87_GPIO69", "Comment": " GPIO69."},
 
         {"Name": "WIZNET_ASG_EVB_PWM0", "Type": "Pwm", "Mapping": "USI_MT3620_BT_COMBO_PWM_CONTROLLER2", "Comment": "Select GPIO8-11 as PWM 8-11."},
         
         {"Name": "WIZNET_ASG_EVB_W5500_SPI", "Type": "SpiMaster", "Mapping": "USI_MT3620_BT_COMBO_ISU0_SPI", "Comment": "W5500 ISU 0 configured as SPI, pin 45 (MISO), pin 48 (SCLK), pin 44 (CSA) and pin 46 (MOSI)."},
-        {"Name": "WIZNET_ASG_EVB_W5500_SPI_CS", "Type": "int", "Mapping": "USI_MT3620_BT_COMBO_PIN44_GPIO29", "Comment": "SD SPI Chip Select (CS) value \"B\". This is not a peripheral identifier, and so has no meaning in an app manifest."},
+        {"Name": "WIZNET_ASG_EVB_W5500_SPI_CS", "Type": "int", "Mapping": "USI_MT3620_BT_COMBO_PIN44_GPIO29", "Comment": "SD SPI Chip Select (CS) value \"A\". This is not a peripheral identifier, and so has no meaning in an app manifest."},
         {"Name": "WIZNET_ASG_EVB_W5500_RESET", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN67_GPIO2", "Comment": "Reset W5500."},
         {"Name": "WIZNET_ASG_EVB_W5500_INTN", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN64_GPIO5", "Comment": "W5500_INTn."},
 
