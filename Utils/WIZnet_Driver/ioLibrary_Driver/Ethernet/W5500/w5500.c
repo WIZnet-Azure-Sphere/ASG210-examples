@@ -111,8 +111,19 @@ uint8_t Init_SPIMaster(void)
 // 20230707 taylor
 #if 1
     // EVB V1.0
-    // SPI_1 CS_A enable
+#if 1
+    // mB1 / mB2 SPI
+#if 0
+    // ISU1 SPI mB1 CS_A enable
+    spiFd = SPIMaster_Open(WIZNET_ASG_EVB_MB1_SPI, MT3620_SPI_CS_A, &config);
+#else
+    // ISU2 SPI mB2 CS_A enable
+    spiFd = SPIMaster_Open(WIZNET_ASG_EVB_MB2_SPI, MT3620_SPI_CS_A, &config);
+#endif
+#else
+    // ISU0 SPI CS_A enable
     spiFd = SPIMaster_Open(WIZNET_ASG_EVB_W5500_SPI, MT3620_SPI_CS_A, &config);
+#endif
 #else
     // ASG 210
 #if 0   // SPI_1 CS_A enable
