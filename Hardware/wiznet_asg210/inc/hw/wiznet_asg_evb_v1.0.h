@@ -9,16 +9,16 @@
 #pragma once
 #include "../../../usi_mt3620_bt/inc/hw/usi_mt3620_bt.h"
 
-// AZURE Connection status LED uses GPIO58.
+// LED1 uses GPIO58.
 #define WIZNET_ASG_EVB_STATUS_LD1 USI_MT3620_BT_COMBO_PIN94_GPIO58
 
-// WiFi Connection status LED uses GPIO46 and ADC5.
+// LED2 uses GPIO46.
 #define WIZNET_ASG_EVB_STATUS_LD2 USI_MT3620_BT_COMBO_PIN23_GPIO46
 
-// WLAN Connection status LED uses GPIO60.
+// LED3 uses GPIO60.
 #define WIZNET_ASG_EVB_STATUS_LD3 USI_MT3620_BT_COMBO_PIN93_GPIO60
 
-// BLE Connection status LED uses GPIO45 and ADC4.
+// LED4 uses GPIO45.
 #define WIZNET_ASG_EVB_STATUS_LD4 USI_MT3620_BT_COMBO_PIN24_GPIO45
 
 //  GPIO56.
@@ -189,7 +189,7 @@
 // W5500 ISU 0 configured as SPI, pin 45 (MISO), pin 48 (SCLK), pin 44 (CSA) and pin 46 (MOSI).
 #define WIZNET_ASG_EVB_W5500_SPI USI_MT3620_BT_COMBO_ISU0_SPI
 
-// SD SPI Chip Select (CS) value "B". This is not a peripheral identifier, and so has no meaning in an app manifest.
+// SD SPI Chip Select (CS) value "A". This is not a peripheral identifier, and so has no meaning in an app manifest.
 #define WIZNET_ASG_EVB_W5500_SPI_CS USI_MT3620_BT_COMBO_PIN44_GPIO29
 
 // Reset W5500.

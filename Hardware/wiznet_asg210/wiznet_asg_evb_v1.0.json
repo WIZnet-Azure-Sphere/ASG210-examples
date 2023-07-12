@@ -17,10 +17,10 @@
     },
     "Imports" : [ {"Path": "../usi_mt3620_bt/usi_mt3620_bt.json"} ],
     "Peripherals": [
-        {"Name": "WIZNET_ASG_EVB_STATUS_LD1", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN94_GPIO58", "Comment": "AZURE Connection status LED uses GPIO58."},
-        {"Name": "WIZNET_ASG_EVB_STATUS_LD2", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN23_GPIO46", "Comment": "WiFi Connection status LED uses GPIO46 and ADC5."},
-        {"Name": "WIZNET_ASG_EVB_STATUS_LD3", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN93_GPIO60", "Comment": "WLAN Connection status LED uses GPIO60."},
-        {"Name": "WIZNET_ASG_EVB_STATUS_LD4", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN24_GPIO45", "Comment": "BLE Connection status LED uses GPIO45 and ADC4."},
+        {"Name": "WIZNET_ASG_EVB_STATUS_LD1", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN94_GPIO58", "Comment": "LED1 uses GPIO58."},
+        {"Name": "WIZNET_ASG_EVB_STATUS_LD2", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN23_GPIO46", "Comment": "LED2 uses GPIO46."},
+        {"Name": "WIZNET_ASG_EVB_STATUS_LD3", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN93_GPIO60", "Comment": "LED3 uses GPIO60."},
+        {"Name": "WIZNET_ASG_EVB_STATUS_LD4", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN24_GPIO45", "Comment": "LED4 uses GPIO45."},
 
         {"Name": "WIZNET_ASG_EVB_GPIO56", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN1_GPIO56", "Comment": " GPIO56."},
         {"Name": "WIZNET_ASG_EVB_GPIO59", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN2_GPIO59", "Comment": " GPIO59."},
