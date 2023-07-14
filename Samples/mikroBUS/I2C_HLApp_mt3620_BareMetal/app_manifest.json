@@ -1,0 +1,19 @@
+{
+  "SchemaVersion": 1,
+  "Name" : "I2C_HLApp_mt3620_BareMetal",
+  "ComponentId" : "685f13af-25a5-40b2-8dd8-8cbc253ecbd8",
+  "EntryPoint": "/bin/app",
+  "CmdArgs": [],
+  "Capabilities": {
+    "Gpio": [
+      "$WIZNET_ASG_EVB_USER_SW",
+      "$WIZNET_ASG_EVB_STATUS_LD1",
+      "$WIZNET_ASG_EVB_MB1_I2C_NSEL",
+      "$WIZNET_ASG_EVB_ISU3_INT_NSEL"
+    ],
+    "I2cMaster": [
+      "$WIZNET_ASG_EVB_MB1_I2C"
+    ]
+  },
+  "ApplicationType": "Default"
+}
