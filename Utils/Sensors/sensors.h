@@ -14,9 +14,14 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#if 1
+
+//#define SENSORS_RT
+
+#ifdef SENSORS_RT
+#include "os_hal_i2c.h"
 #else
 #include <applibs/log.h>
+#include <applibs/i2c.h>
 #endif
 
 /**
@@ -25,7 +30,7 @@
  * ----------------------------------------------------------------------------------------------------
  */
 
-#if 1
+#ifdef SENSORS_RT
 #include "printf.h"
 #else
 #define printf Log_Debug

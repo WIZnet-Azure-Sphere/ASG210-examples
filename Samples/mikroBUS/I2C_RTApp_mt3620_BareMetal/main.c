@@ -157,8 +157,8 @@ _Noreturn void RTCoreMain(void)
     mtk_os_hal_gpt_start(gpt_timer_button);
 
     gpio_output(sel_nI2C, OS_HAL_GPIO_DATA_LOW);
-#if 0
-    // Internal mB1 / mB2
+#if 1
+    // Internal mB1 / mB2 / grove
     gpio_output(sel_nINT, OS_HAL_GPIO_DATA_LOW);
 #else
     // External

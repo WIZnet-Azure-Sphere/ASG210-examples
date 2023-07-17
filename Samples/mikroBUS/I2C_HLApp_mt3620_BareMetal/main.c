@@ -192,7 +192,7 @@ static ExitCode InitPeripheralsAndHandlers(void)
         return ExitCode_Init_I2C_NSEL;
     }
 
-    // Open WIZNET_ASG_EVB_ISU3_INT_NSEL GPIO, set as output with value GPIO_Value_Low for mB1/mB2(high for external)
+    // Open WIZNET_ASG_EVB_ISU3_INT_NSEL GPIO, set as output with value GPIO_Value_Low for mB1/mB2/grove(high for external)
     Log_Debug("Opening WIZNET_ASG_EVB_ISU3_INT_NSEL as output.\n");
     gpioINTnSel = GPIO_OpenAsOutput(WIZNET_ASG_EVB_ISU3_INT_NSEL, GPIO_OutputMode_PushPull, GPIO_Value_Low);
     if (gpioINTnSel == -1)

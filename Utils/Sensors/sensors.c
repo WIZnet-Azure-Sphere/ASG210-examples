@@ -10,12 +10,6 @@
  * ----------------------------------------------------------------------------------------------------
  */
 #include <stdio.h>
-
-#if 1
-#include "os_hal_i2c.h"
-#else
-#include <applibs/i2c.h>
-#endif
 #include "sensors.h"
 
 /**
@@ -46,13 +40,13 @@ int sensor_write(uint8_t addr, const uint8_t *src, size_t len, bool nostop)
   int ret;
   ssize_t transferredBytes;
 
-#if 1
+#ifdef SENSORS_RT
   ret = mtk_os_hal_i2c_write(i2c_fd, addr, src, len);
 #else
   transferredBytes = I2CMaster_Write(i2c_fd, addr, src, len);
 #endif
 
-#if 1
+#ifdef SENSORS_RT
   if (I2C_OK == ret)
   {
   }
@@ -79,13 +73,13 @@ int sensor_read(uint8_t addr, uint8_t *dst, size_t len, bool nostop)
   int ret;
   ssize_t transferredBytes;
 
-#if 1
+#ifdef SENSORS_RT
   ret = mtk_os_hal_i2c_read(i2c_fd, addr, dst, len);
 #else
   transferredBytes = I2CMaster_Read(i2c_fd, addr, dst, len);
 #endif
 
-#if 1
+#ifdef SENSORS_RT
   if (I2C_OK == ret)
   {
   }
