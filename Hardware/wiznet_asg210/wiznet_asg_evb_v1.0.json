@@ -54,6 +54,12 @@
         {"Name": "WIZNET_ASG_EVB_ISU3_INT_NSEL", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN56_GPIO12", "Comment": "Select ISU3 mB1/mB2 internal header."},
 
         {"Name": "WIZNET_ASG_EVB_ADC", "Type": "Adc", "Mapping": "USI_MT3620_BT_COMBO_ADC_CONTROLLER0", "Comment": "Select ADC 0-7."},
+        {"Name": "WIZNET_ASG_EVB_ADC_CH0", "Type": "int", "MainCoreHeaderValue": "MT3620_ADC_CHANNEL0", "Comment": "MT3620 ADC CHANNEL 0, it must not be used as a peripheral in app_manifest.json"},
+        {"Name": "WIZNET_ASG_EVB_ADC_CH1", "Type": "int", "MainCoreHeaderValue": "MT3620_ADC_CHANNEL1", "Comment": "MT3620 ADC CHANNEL 1, it must not be used as a peripheral in app_manifest.json"},
+        {"Name": "WIZNET_ASG_EVB_ADC_CH2", "Type": "int", "MainCoreHeaderValue": "MT3620_ADC_CHANNEL2", "Comment": "MT3620 ADC CHANNEL 2, it must not be used as a peripheral in app_manifest.json"},
+        {"Name": "WIZNET_ASG_EVB_ADC_VAR", "Type": "int", "MainCoreHeaderValue": "MT3620_ADC_CHANNEL0", "Comment": "MT3620 ADC VAR, it must not be used as a peripheral in app_manifest.json"},
+        {"Name": "WIZNET_ASG_EVB_ADC_MB1", "Type": "int", "MainCoreHeaderValue": "MT3620_ADC_CHANNEL1", "Comment": "MT3620 ADC mB1 ADC, it must not be used as a peripheral in app_manifest.json"},
+        {"Name": "WIZNET_ASG_EVB_ADC_MB2", "Type": "int", "MainCoreHeaderValue": "MT3620_ADC_CHANNEL2", "Comment": "MT3620 ADC mB2 ADC, it must not be used as a peripheral in app_manifest.json"},
 
         {"Name": "WIZNET_ASG_EVB_MB1_RST", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN69_GPIO0", "Comment": "Select GPIO0 as MB1 RST."},
         {"Name": "WIZNET_ASG_EVB_MB1_INT", "Type": "Gpio", "Mapping": "USI_MT3620_BT_COMBO_PIN68_GPIO1", "Comment": "Select GPIO1 as MB1 INT."},

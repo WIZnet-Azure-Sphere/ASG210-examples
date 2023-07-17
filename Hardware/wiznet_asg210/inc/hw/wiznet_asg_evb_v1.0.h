@@ -90,6 +90,24 @@
 // Select ADC 0-7.
 #define WIZNET_ASG_EVB_ADC USI_MT3620_BT_COMBO_ADC_CONTROLLER0
 
+// MT3620 ADC CHANNEL 0, it must not be used as a peripheral in app_manifest.json
+#define WIZNET_ASG_EVB_ADC_CH0 MT3620_ADC_CHANNEL0
+
+// MT3620 ADC CHANNEL 1, it must not be used as a peripheral in app_manifest.json
+#define WIZNET_ASG_EVB_ADC_CH1 MT3620_ADC_CHANNEL1
+
+// MT3620 ADC CHANNEL 2, it must not be used as a peripheral in app_manifest.json
+#define WIZNET_ASG_EVB_ADC_CH2 MT3620_ADC_CHANNEL2
+
+// MT3620 ADC VAR, it must not be used as a peripheral in app_manifest.json
+#define WIZNET_ASG_EVB_ADC_VAR MT3620_ADC_CHANNEL0
+
+// MT3620 ADC mB1 ADC, it must not be used as a peripheral in app_manifest.json
+#define WIZNET_ASG_EVB_ADC_MB1 MT3620_ADC_CHANNEL1
+
+// MT3620 ADC mB2 ADC, it must not be used as a peripheral in app_manifest.json
+#define WIZNET_ASG_EVB_ADC_MB2 MT3620_ADC_CHANNEL2
+
 // Select GPIO0 as MB1 RST.
 #define WIZNET_ASG_EVB_MB1_RST USI_MT3620_BT_COMBO_PIN69_GPIO0
 
